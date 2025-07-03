@@ -1,7 +1,7 @@
 import requests
 from bs4 import BeautifulSoup
 
-def crawl_seoul_wikipedia():
+def crawl_seoul_wikipedia() -> None:
     url = "https://ko.wikipedia.org/wiki/서울특별시"
     response = requests.get(url)
     soup = BeautifulSoup(response.text, 'html.parser')
@@ -11,12 +11,7 @@ def crawl_seoul_wikipedia():
 
     text_data = "\n".join(p.get_text().strip() for p in paragraphs if p.get_text().strip())
 
-    with open("seoul_info.txt", "w", encoding="utf-8") as f:
+    with open("data/seoul_info.txt", "w", encoding="utf-8") as f:
         f.write(text_data)
 
     print("크롤링 완료! 텍스트 저장됨.")
-
-
-# ✅ 이 아래가 실행 엔트리포인트
-if __name__ == "__main__":
-    crawl_seoul_wikipedia()
