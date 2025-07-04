@@ -3,7 +3,7 @@ import os
 QDRANT_HOST = os.getenv("QDRANT_HOST", "localhost")
 QDRANT_PORT = int(os.getenv("QDRANT_PORT", 6333))
 OLLAMA_BASE_URL = os.getenv("OLLAMA_BASE_URL", "http://localhost:11434")
-OLLAMA_MODEL = os.getenv("OLLAMA_MODEL", "phi4-mini-reasoning")
+OLLAMA_MODEL = os.getenv("OLLAMA_MODEL", "phi4-mini")
 
 # Sentence Transformer 모델 이름
 SENTENCE_TRANSFORMER_MODEL = os.getenv("SENTENCE_TRANSFORMER_MODEL", "intfloat/multilingual-e5-base")

@@ -1,5 +1,6 @@
 from qdrant_client import QdrantClient
 from qdrant_client.http.models import Distance, VectorParams, PointStruct
+from qdrant_client import models
 from sentence_transformers import SentenceTransformer
 import uuid
 import os
@@ -13,6 +14,12 @@ def embed_data_to_qdrant(file_path: str = "data/seoul_info.txt", collection_name
         client.create_collection(
             collection_name=collection_name,
             vectors_config=VectorParams(size=768, distance=Distance.COSINE),
+        )
+        # text 필드에 대한 인덱스 생성
+        client.create_payload_index(
+            collection_name=collection_name,
+            field_name="text",
+            field_type="text",
         )
     else:
         print(f"Collection '{collection_name}' already exists. Skipping creation.")
