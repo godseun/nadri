@@ -1,8 +1,9 @@
 import re
+import json
 import asyncio
-
 from typing import AsyncGenerator, List
 
+from requests.exceptions import RequestException
 from qdrant_client import QdrantClient, models
 from qdrant_client.http.models import ScoredPoint
 from qdrant_client.models import Record
@@ -71,7 +72,6 @@ class ChatService:
             with_payload=True
         )
 
-        print(vector_search_result, keyword_search_result)
         keyword_search_result = keyword_search_result[0]
 
         # 결과 통합 및 중복 제거
@@ -109,26 +109,34 @@ class ChatService:
         final_context = truncate_context(context)
         prompt = f"다음 정보를 참고하여 질문에 답해주세요:\n\n{final_context}"
 
-        response_iter = self.chain.stream({"question_with_context": prompt, "human_question": query})
-        print(f"response_iter: {response_iter}")
-        buffer = ""
-        for chunk in response_iter:
-            processed_chunk = clean_chunk(chunk)
-            buffer += processed_chunk
+        try:
+            response_iter = self.chain.stream({"question_with_context": prompt, "human_question": query})
+            buffer = ""
+            for chunk in response_iter:
+                processed_chunk = clean_chunk(chunk)
+                buffer += processed_chunk
 
-            # Process buffer line by line
-            while "\n" in buffer:
-                newline_index = buffer.find("\n")
-                line = buffer[:newline_index] # Include the newline
-                yield f"data: {line}\n\n" # Send each line as a separate SSE data event
-                buffer = buffer[newline_index + 1:]
+                # Process buffer line by line
+                while "\n" in buffer:
+                    newline_index = buffer.find("\n")
+                    line = buffer[:newline_index]
+                    yield f"data: {line}\n\n"
+                    buffer = buffer[newline_index + 1:]
 
-            await asyncio.sleep(settings.STREAM_DELAY)
+                await asyncio.sleep(settings.STREAM_DELAY)
 
-        if buffer: # Yield any remaining content after the loop
-            yield f"data: {buffer}\n\n"
-
-        yield "data: [DONE]\n\n"
+            if buffer:
+                yield f"data: {buffer}\n\n"
+        except RequestException as e:
+            print(f"Connection error during LLM stream: {e}")
+            error_message = json.dumps({"type": "error", "message": "AI 모델 연결에 실패했습니다. 서버 상태를 확인해주세요."})
+            yield f"data: {error_message}\n\n"
+        except Exception as e:
+            print(f"Error during LLM stream: {e}")
+            error_message = json.dumps({"type": "error", "message": "현재 AI 모델 응답이 지연되고 있습니다. 잠시 후 다시 시도해주세요."})
+            yield f"data: {error_message}\n\n"
+        finally:
+            yield "data: [DONE]\n\n"
 
 chat_service = ChatService()
 
