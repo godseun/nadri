@@ -1,13 +1,9 @@
-from langchain_ollama import ChatOllama
+from src.services.llm_factory import get_llm
 from langchain_core.prompts import ChatPromptTemplate
 from langchain_core.output_parsers import StrOutputParser
 
 # LLM (Ollama LangChain wrapper)
-llm = ChatOllama(
-    model="phi4-mini",
-    base_url="http://192.168.219.111:11434",
-    temperature=0.2,
-)
+llm = get_llm()
 
 # LangChain Prompt 구성
 prompt_template = ChatPromptTemplate.from_messages([

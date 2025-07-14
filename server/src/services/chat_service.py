@@ -9,7 +9,7 @@ from qdrant_client.http.models import ScoredPoint
 from qdrant_client.models import Record
 from sentence_transformers import SentenceTransformer
 
-from langchain_ollama import ChatOllama
+from src.services.llm_factory import get_llm
 from langchain_core.prompts import ChatPromptTemplate
 from langchain_core.output_parsers import StrOutputParser
 from langchain_core.runnables import RunnableGenerator
@@ -25,11 +25,7 @@ class ChatService:
     def __init__(self):
         self.qdrant_client = QdrantClient(host=settings.QDRANT_HOST, port=settings.QDRANT_PORT)
         self.embedding_model = SentenceTransformer(settings.SENTENCE_TRANSFORMER_MODEL)
-        self.llm = ChatOllama(
-            model=settings.OLLAMA_MODEL,
-            base_url=settings.OLLAMA_BASE_URL,
-            temperature=0.2,
-        )
+        self.llm = get_llm()
         self.prompt_template = ChatPromptTemplate.from_messages([
             ("system", "당신은 서울에 대한 정보를 잘 알고 있는 여행/행사 가이드입니다."),
             ("system", "응답은 [{question_with_context}] 내용을 참고하여 한국어로 된 Markdown 형식으로 작성해주세요."),
