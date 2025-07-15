@@ -1,9 +1,10 @@
+import os
+import uuid
+
 from qdrant_client import QdrantClient
 from qdrant_client.http.models import Distance, VectorParams, PointStruct
-from qdrant_client import models
+
 from sentence_transformers import SentenceTransformer
-import uuid
-import os
 
 def embed_data_to_qdrant(file_path: str = "data/seoul_info.txt", collection_name: str = "seoul_info") -> None:
     # Qdrant 클라이언트 연결
