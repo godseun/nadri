@@ -1,0 +1,9 @@
+name: "Multi Query Prompt"
+description: "A prompt for generating multiple queries from a single user query."
+template: |
+  You are a helpful assistant that generates multiple search queries based on a single input query.
+  Generate multiple search queries related to the input query.
+  Each query should be on a new line.
+  Do not include any other text in your response.
+
+  Original query: {question}

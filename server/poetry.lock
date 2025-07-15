@@ -837,6 +837,26 @@ tenacity = ">=8.1.0,<8.4.0 || >8.4.0,<10.0.0"
 typing-extensions = ">=4.7"
 
 [[package]]
+name = "langchain-huggingface"
+version = "0.3.0"
+description = "An integration package connecting Hugging Face and LangChain."
+optional = false
+python-versions = ">=3.9"
+groups = ["main"]
+files = [
+    {file = "langchain_huggingface-0.3.0-py3-none-any.whl", hash = "sha256:aab85d57e649c805d2f2a9f8d72d87b5d12c45dd4831309ac9c37753ddb237ed"},
+    {file = "langchain_huggingface-0.3.0.tar.gz", hash = "sha256:d1cf93fb4d4eafc8b44edcd5fba904b27cbd3fda6cdef0e2321fbcf4efcda822"},
+]
+
+[package.dependencies]
+huggingface-hub = ">=0.30.2"
+langchain-core = ">=0.3.65,<1.0.0"
+tokenizers = ">=0.19.1"
+
+[package.extras]
+full = ["sentence-transformers (>=2.6.0)", "transformers (>=4.39.0)"]
+
+[[package]]
 name = "langchain-ollama"
 version = "0.3.3"
 description = "An integration package connecting Ollama and LangChain"
@@ -851,6 +871,26 @@ files = [
 [package.dependencies]
 langchain-core = ">=0.3.60,<1.0.0"
 ollama = ">=0.4.8,<1.0.0"
+
+[[package]]
+name = "langchain-qdrant"
+version = "0.2.0"
+description = "An integration package connecting Qdrant and LangChain"
+optional = false
+python-versions = "<4,>=3.9"
+groups = ["main"]
+files = [
+    {file = "langchain_qdrant-0.2.0-py3-none-any.whl", hash = "sha256:8eab5b8a553204ddb809d8183a6f1bc12fc265688592d9d897388f6939c79bf8"},
+    {file = "langchain_qdrant-0.2.0.tar.gz", hash = "sha256:41b8573cbb1b4706f76dc769251d8e6b3e4107ecd5fa97c58141977ec19fba75"},
+]
+
+[package.dependencies]
+langchain-core = ">=0.2.43,<0.3.0 || >0.3.0,<0.3.1 || >0.3.1,<0.3.2 || >0.3.2,<0.3.3 || >0.3.3,<0.3.4 || >0.3.4,<0.3.5 || >0.3.5,<0.3.6 || >0.3.6,<0.3.7 || >0.3.7,<0.3.8 || >0.3.8,<0.3.9 || >0.3.9,<0.3.10 || >0.3.10,<0.3.11 || >0.3.11,<0.3.12 || >0.3.12,<0.3.13 || >0.3.13,<0.3.14 || >0.3.14,<0.4.0"
+pydantic = ">=2.7.4,<3.0.0"
+qdrant-client = ">=1.10.1,<2.0.0"
+
+[package.extras]
+fastembed = ["fastembed (>=0.3.3,<0.4.0) ; python_version >= \"3.9\" and python_version < \"3.13\""]
 
 [[package]]
 name = "langchain-text-splitters"
@@ -3151,4 +3191,4 @@ cffi = ["cffi (>=1.11)"]
 [metadata]
 lock-version = "2.1"
 python-versions = ">=3.9,<4.0"
-content-hash = "afed03a358ab6dc90a6d6d31c8f9c1eebade5345b345c6d49299fc9f5f20da8a"
+content-hash = "33c871d921ceb02ed0686e6b84d197ce8d26d1a1febb70fd4ca2d74eccc327f5"

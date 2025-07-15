@@ -2,7 +2,7 @@ import os
 import uuid
 
 from qdrant_client import QdrantClient
-from qdrant_client.http.models import Distance, VectorParams, PointStruct
+from qdrant_client.http.models import Distance, VectorParams, PointStruct, models
 
 from sentence_transformers import SentenceTransformer
 
@@ -19,8 +19,8 @@ def embed_data_to_qdrant(file_path: str = "data/seoul_info.txt", collection_name
         # text 필드에 대한 인덱스 생성
         client.create_payload_index(
             collection_name=collection_name,
-            field_name="text",
-            field_type="text",
+            field_name="page_content",
+            field_schema=models.TextIndexParams(type="text"),
         )
     else:
         print(f"Collection '{collection_name}' already exists. Skipping creation.")
@@ -44,7 +44,7 @@ def embed_data_to_qdrant(file_path: str = "data/seoul_info.txt", collection_name
         PointStruct(
             id=str(uuid.uuid4()),
             vector=vector.tolist(),
-            payload={"text": text},
+            payload={"page_content": text},
         )
         for vector, text in zip(embeddings, chunks)
     ]
